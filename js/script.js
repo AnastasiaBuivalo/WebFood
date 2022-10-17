@@ -106,6 +106,7 @@ window.addEventListener('DOMContentLoaded', () =>{
               modalClosed = document.querySelector('[data-close]'),
               modal = document.querySelector('.modal');
 
+        
 
         function openModal(){
             modal.classList.add('show');
@@ -113,6 +114,9 @@ window.addEventListener('DOMContentLoaded', () =>{
             document.body.style.overflow = 'hidden';
             clearInterval(modalTimerId);
         }
+
+        const modalTimerId = setTimeout(openModal, 3000000);
+
         function closeModal(){
             modal.classList.remove('show');
             modal.classList.add('hide');
@@ -144,8 +148,6 @@ window.addEventListener('DOMContentLoaded', () =>{
             if(e.code == "Escape" && modal.classList.contains('show'))
                 closeModal();
         })
-
-        // const modalTimerId = setTimeout(openModal, 3000);
 
         class MenuCard{
             constructor(src, alt, title, descr, price, transfer, parentSelector, ...classes){
@@ -214,13 +216,60 @@ window.addEventListener('DOMContentLoaded', () =>{
         21,
         56,
         ".menu .container",
-    ).render();
+        ).render();
 
+    //SERVER
+const forms = document.querySelectorAll('form');
+forms.forEach(item=>{
+    postData(item);
+});
+
+const message = {
+    loading: 'Загрузка',
+    success: 'Успешно! Мы скоро вам перезвоним',
+    failure: 'Упс... Что-то пошло не так'
+};
+
+function postData(form){
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+
+        let statusMessage = document.createElement('div');
+        statusMessage.classList.add('status');
+        statusMessage.textContent = message.loading;
+        form.append(statusMessage);
+
+        const request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-type', 'application/json; charset:utf-8');
+        
+        const formData = new FormData(form);
+
+        const object = {};
+        formData.forEach(function(value, key){
+            object[key] = value;
+        });
+        const json = JSON.stringify(object);
+        request.send(json);
+        request.addEventListener('load', ()=>{
+            if(request.status === 200){
+                statusMessage.textContent = message.success;
+                form.reset();
+                setTimeout(()=>{statusMessage.remove()}, 20000);
+            }
+            else{
+                statusMessage.textContent = message.failure;
+            }
+        })
+        
+    })
+}
 
 });
 
-function calc(num, basis, ...rest){
-    console.log(num, basis, rest);
-}
+// function calc(num, basis, ...rest){
+//     console.log(num, basis, rest);
+// }
 
-calc(2, 3);
+// calc(2, 3);
+
