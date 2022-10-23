@@ -15,5 +15,8 @@
     "url": "https://github.com/AnastasiaBuivalo/WebFood/issues"
   },
   "homepage": "https://github.com/AnastasiaBuivalo/WebFood#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "axios": "^1.1.3"
+  }
 }
