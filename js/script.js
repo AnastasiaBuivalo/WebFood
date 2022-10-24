@@ -369,9 +369,28 @@ window.addEventListener('DOMContentLoaded', () =>{
     // getDynamicInformation('#age');
 
     const result = document.querySelector('.calculating__result span');
-    let sex = 'female',
-        height, weight, age,
+    let sex = 'female',         
         ratio = 1.375;
+    if(localStorage.getItem('sex'))
+        sex = localStorage.getItem('sex');
+    if(localStorage.getItem('ratio'))
+        ratio = localStorage.getItem('ratio');
+
+        let height, weight, age;
+
+    function initLocalSettings(selector, activeClass){
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((elem)=>{
+            elem.classList.remove(activeClass);
+            if(elem.getAttribute('id') === localStorage.getItem('sex'))
+                elem.classList.add(activeClass);
+            if(elem.getAttribute('data-ratio') === localStorage.getItem('ratio'))
+                elem.classList.add(activeClass);
+        })
+    }
+
+    initLocalSettings('#gender div', 'calculating__choose-item_active');
+    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
@@ -395,8 +414,10 @@ window.addEventListener('DOMContentLoaded', () =>{
             elem.addEventListener('click', (e) => {
                 if (e.target.getAttribute('data-ratio')) {
                     ratio = +e.target.getAttribute('data-ratio');
+                    localStorage.setItem('ratio', ratio);
                 } else {
                     sex = e.target.getAttribute('id');
+                    localStorage.setItem('sex', sex);
                 }
     
                 elements.forEach(elem => {
@@ -428,7 +449,10 @@ window.addEventListener('DOMContentLoaded', () =>{
                     age = +input.value;
                     break;
             }
-
+             if(input.value.match(/\D/g))
+                input.style.border = '1px solid red'
+            else
+                input.style.border = 'none'
             calcTotal();
         });
     }
