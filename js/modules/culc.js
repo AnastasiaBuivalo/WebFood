@@ -97,4 +97,5 @@ function culc(){
 
 }
 
-module.exports = culc;
+//module.exports = culc;
+export default culc;

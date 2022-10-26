@@ -1,15 +1,20 @@
-window.addEventListener('DOMContentLoaded', () =>{
-    const modal = require('./modules/modal'),
-          forms = require('./modules/forms'),
-          culc = require('./modules/culc'),
-          timer = require('./modules/timer'),
-          tabs = require('./modules/timer'),
-          cards = require('./modules/cards');
+import modal from './modules/modal'
+import forms from './modules/forms'
+import culc from './modules/culc'
+import timer from './modules/timer'
+import tabs from './modules/tabs'
+import cards from './modules/cards'
 
-    modal();
+import {openModal} from './modules/modal'
+
+window.addEventListener('DOMContentLoaded', () =>{
+
+    const modalTimerId = setTimeout(()=>openModal('.modal', modalTimerId), 3000000);
+
+    modal('[data-modal]', '.modal', modalTimerId);
     forms();
     culc();
-    timer();
+    timer(modalTimerId);
     tabs();  
     cards();   
 });
